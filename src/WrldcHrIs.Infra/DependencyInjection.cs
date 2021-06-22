@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using WrldcHrIs.Infra.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using WrldcHrIs.Core.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace WrldcHrIs.Infra
 {
@@ -18,7 +21,7 @@ namespace WrldcHrIs.Infra
             {
                 // Add Persistence Infra
                 services.AddDbContext<AppDbContext>(options =>
-                    options.UseInMemoryDatabase(databaseName: "MeterData"));
+                    options.UseInMemoryDatabase(databaseName: "HrisDb"));
 
             }
             else
@@ -28,6 +31,36 @@ namespace WrldcHrIs.Infra
                     options.UseNpgsql(
                         configuration.GetConnectionString("DefaultConnection")));
             }
+
+            // add identity framework on top of entity framework - https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0#custom-user-data
+            services
+                .AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 2;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
+            // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0#cookie-settings
+            services.ConfigureApplicationCookie(options =>
+            {
+                // configure login path for return urls
+                // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-3.1&tabs=visual-studio
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.Cookie.Name = "HrisWebAppCookie";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.HttpOnly = true;
+            });
+
             return services;
         }
     }
