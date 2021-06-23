@@ -1,6 +1,9 @@
+using MeterDataDashboard.Infra.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WrldcHrIs.Application.Common;
+using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra;
+using WrldcHrIs.Infra.Identity;
 using WrldcHrIs.WebApp.Services;
 
 namespace WrldcHrIs.WebApp
@@ -31,11 +36,11 @@ namespace WrldcHrIs.WebApp
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();
             services.AddInfrastructure(Configuration, Environment);
-            services.AddRazorPages();
+            services.AddRazorPages().AddMvcOptions(o => o.Filters.Add(new AuthorizeFilter()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit idInit)
         {
             if (env.IsDevelopment())
             {
@@ -53,7 +58,17 @@ namespace WrldcHrIs.WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            // seed Users and Roles
+            AppDbContextSeed identityInitializer = new AppDbContextSeed()
+            {
+                UserManager = userManager,
+                RoleManager = roleManager,
+                IdentityInit = idInit
+            };
+            identityInitializer.SeedIdentityData();
 
             app.UseEndpoints(endpoints =>
             {

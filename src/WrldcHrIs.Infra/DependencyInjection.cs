@@ -10,6 +10,11 @@ using Microsoft.Extensions.Hosting;
 using WrldcHrIs.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using WrldcHrIs.Infra.Services.Email;
+using WrldcHrIs.Core.Sms;
+using WrldcHrIs.Infra.Services.Sms;
+using WrldcHrIs.Infra.Identity;
 
 namespace WrldcHrIs.Infra
 {
@@ -60,6 +65,25 @@ namespace WrldcHrIs.Infra
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 options.Cookie.HttpOnly = true;
             });
+
+            // add email settings from app config
+            IdentityInit identityInit = new IdentityInit();
+            configuration.Bind("IdentityInit", identityInit);
+            services.AddSingleton(identityInit);
+
+            // add email settings from app config
+            EmailConfiguration emailConfig = new EmailConfiguration();
+            configuration.Bind("EmailSettings", emailConfig);
+            services.AddSingleton(emailConfig);
+
+            // add sms settings from app config
+            SmsConfiguration smsConfig = new SmsConfiguration();
+            configuration.Bind("SmsSettings", smsConfig);
+            services.AddSingleton(smsConfig);
+
+            // Add Infra services
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ISmsSender, SmsSender>();
 
             return services;
         }

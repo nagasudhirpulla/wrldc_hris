@@ -13,7 +13,8 @@ namespace WrldcHrIs.Core.Entities
         public string DisplayName { get; set; }
         public string OfficeId { get; set; }
         public string Designation { get; set; }
-        public string Department { get; set; }
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
         public bool IsActive { get; set; } = true;
 
     }

@@ -4,12 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrldcHrIs.WebApp", "src\WrldcHrIs.WebApp\WrldcHrIs.WebApp.csproj", "{25C5161D-E85A-491E-B894-316283AB98D8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D99E1CB-FEE0-41DA-9DA4-449117EAC45B} = {1D99E1CB-FEE0-41DA-9DA4-449117EAC45B}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrldcHrIs.Core", "src\WrldcHrIs.Core\WrldcHrIs.Core.csproj", "{1D99E1CB-FEE0-41DA-9DA4-449117EAC45B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrldcHrIs.Core", "src\WrldcHrIs.Core\WrldcHrIs.Core.csproj", "{1D99E1CB-FEE0-41DA-9DA4-449117EAC45B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrldcHrIs.Infra", "src\WrldcHrIs.Infra\WrldcHrIs.Infra.csproj", "{25966753-24CB-43E5-B6BF-4D0D5379317B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrldcHrIs.Infra", "src\WrldcHrIs.Infra\WrldcHrIs.Infra.csproj", "{25966753-24CB-43E5-B6BF-4D0D5379317B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrldcHrIs.Application", "src\WrldcHrIs.Application\WrldcHrIs.Application.csproj", "{8CBFFE8D-C5FD-4B45-9D8E-0627F7B0E6F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrldcHrIs.Application", "src\WrldcHrIs.Application\WrldcHrIs.Application.csproj", "{8CBFFE8D-C5FD-4B45-9D8E-0627F7B0E6F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
