@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using WrldcHrIs.Infra.Services.Email;
 using WrldcHrIs.Core.Sms;
 using WrldcHrIs.Infra.Services.Sms;
-using WrldcHrIs.Infra.Identity;
+using WrldcHrIs.Application.Users;
+using WrldcHrIs.Application.Common.Interfaces;
 
 namespace WrldcHrIs.Infra
 {
@@ -25,14 +26,14 @@ namespace WrldcHrIs.Infra
             if (environment.IsEnvironment("Testing"))
             {
                 // Add Persistence Infra
-                services.AddDbContext<AppDbContext>(options =>
+                services.AddDbContext<IAppDbContext, AppDbContext>(options =>
                     options.UseInMemoryDatabase(databaseName: "HrisDb"));
 
             }
             else
             {
                 // Add Persistence Infra
-                services.AddDbContext<AppDbContext>(options =>
+                services.AddDbContext<IAppDbContext, AppDbContext>(options =>
                     options.UseNpgsql(
                         configuration.GetConnectionString("DefaultConnection")));
             }

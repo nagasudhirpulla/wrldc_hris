@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WrldcHrIs.Application.Common;
+using WrldcHrIs.Application.Common.Interfaces;
 using WrldcHrIs.Core.Common;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence.Configurations;
 
 namespace WrldcHrIs.Infra.Persistence
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         public DbSet<Department> Departments { get; set; }
