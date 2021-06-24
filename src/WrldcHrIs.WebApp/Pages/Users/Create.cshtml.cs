@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +27,7 @@ namespace WrldcHrIs.WebApp.Pages.Users
 
         //https://www.learnrazorpages.com/razor-pages/forms/select-lists
         public SelectList DeptOptions { get; set; }
-        
+
         [BindProperty]
         public CreateUserCommand NewUser { get; set; }
         public CreateModel(ILogger<IndexModel> logger, IMediator mediator)
@@ -41,6 +43,14 @@ namespace WrldcHrIs.WebApp.Pages.Users
         public async Task<IActionResult> OnPostAsync()
         {
             DeptOptions = new SelectList(await _mediator.Send(new GetDepartmentsQuery()), "Id", "Name");
+
+            ValidationResult validationCheck = new CreateUserCommandValidator().Validate(NewUser);
+            validationCheck.AddToModelState(ModelState, nameof(NewUser));
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             IdentityResult result = await _mediator.Send(NewUser);
             if (result.Succeeded)
