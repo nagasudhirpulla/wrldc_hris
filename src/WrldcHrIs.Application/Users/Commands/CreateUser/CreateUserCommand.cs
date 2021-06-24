@@ -15,7 +15,7 @@ namespace WrldcHrIs.Application.Users.Commands.CreateUser
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public string UserRole { get; set; } = SecurityConstants.GuestRoleString;
+        public string UserRole { get; set; } = SecurityConstants.EmployeeRoleString;
         public string OfficeId { get; set; }
         public string Designation { get; set; }
         public int DepartmentId { get; set; }

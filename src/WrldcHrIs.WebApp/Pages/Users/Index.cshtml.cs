@@ -15,7 +15,7 @@ namespace WrldcHrIs.WebApp.Pages.Users
     [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class IndexModel : PageModel
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<IndexModel> _logger;
         private readonly IMediator _mediator;
         public IList<UserDTO> Users { get; set; }
 

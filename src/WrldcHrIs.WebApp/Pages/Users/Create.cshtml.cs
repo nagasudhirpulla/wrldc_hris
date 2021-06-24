@@ -25,24 +25,27 @@ namespace WrldcHrIs.WebApp.Pages.Users
         private readonly ILogger _logger;
         private readonly IMediator _mediator;
 
-        //https://www.learnrazorpages.com/razor-pages/forms/select-lists
-        public SelectList DeptOptions { get; set; }
-
-        [BindProperty]
-        public CreateUserCommand NewUser { get; set; }
         public CreateModel(ILogger<IndexModel> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
         }
+
+        //https://www.learnrazorpages.com/razor-pages/forms/select-lists
+        public SelectList DeptOptions { get; set; }
+        public SelectList URoles { get; set; }
+
+        [BindProperty]
+        public CreateUserCommand NewUser { get; set; }
+
         public async Task OnGetAsync()
         {
-            DeptOptions = new SelectList(await _mediator.Send(new GetDepartmentsQuery()), "Id", "Name");
+            await InitSelectListItems();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            DeptOptions = new SelectList(await _mediator.Send(new GetDepartmentsQuery()), "Id", "Name");
+            await InitSelectListItems();
 
             ValidationResult validationCheck = new CreateUserCommandValidator().Validate(NewUser);
             validationCheck.AddToModelState(ModelState, nameof(NewUser));
@@ -64,6 +67,12 @@ namespace WrldcHrIs.WebApp.Pages.Users
             }
             return Page();
 
+        }
+
+        public async Task InitSelectListItems()
+        {
+            DeptOptions = new SelectList(await _mediator.Send(new GetDepartmentsQuery()), "Id", "Name");
+            URoles = new SelectList(SecurityConstants.GetRoles());
         }
     }
 }

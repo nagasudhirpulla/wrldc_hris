@@ -21,6 +21,11 @@
                 <span asp-validation-for="NewUser.DisplayName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="NewUser.UserRole"></label>
+                <select asp-for="NewUser.UserRole" class="form-control" asp-items="Model.URoles"></select>
+                <span asp-validation-for="NewUser.UserRole" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="NewUser.Email"></label>
                 <input asp-for="NewUser.Email" class="form-control" />
                 <span asp-validation-for="NewUser.Email" class="text-danger"></span>
@@ -62,7 +67,7 @@
             </div>
             <button type="submit" class="btn btn-success">Create User</button>
         </form>
-        <a asp-action="Index">Back to List</a>
+        <a asp-page="/Users/Index">Back to List</a>
     </div>
 </div>
 
