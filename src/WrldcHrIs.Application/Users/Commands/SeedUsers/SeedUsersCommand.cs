@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,45 +31,45 @@ namespace WrldcHrIs.Application.Users.Commands.SeedUsers
 
             public async Task<bool> Handle(SeedUsersCommand request, CancellationToken cancellationToken)
             {
-                // seed roles
-                SeedUserRoles(_roleManager);
-                // seed admin user
-                SeedUsers(_userManager, _identityInit);
+                await SeedUserRoles();
+                await SeedUsers();
                 return true;
             }
 
             /**
              * This method seeds admin and guest users
              * **/
-            public void SeedUsers(UserManager<ApplicationUser> userManager, IdentityInit initVariables)
+            public async Task SeedUsers()
             {
-                SeedUser(userManager, initVariables.AdminUserName, initVariables.AdminEmail,
-                    initVariables.AdminPassword, SecurityConstants.AdminRoleString);
-                SeedUser(userManager, initVariables.GuestUserName, initVariables.GuestEmail,
-                    initVariables.GuestPassword, SecurityConstants.GuestRoleString);
+                int deptId = (await _context.Departments.Where(d => d.Name.ToLower() == "na").FirstAsync()).Id;
+                await SeedUser(_identityInit.AdminUserName, _identityInit.AdminEmail,
+                    _identityInit.AdminPassword, SecurityConstants.AdminRoleString, deptId);
+                await SeedUser(_identityInit.GuestUserName, _identityInit.GuestEmail,
+                    _identityInit.GuestPassword, SecurityConstants.GuestRoleString, deptId);
             }
 
             /**
              * This method seeds a user
              * **/
-            public void SeedUser(UserManager<ApplicationUser> userManager, string userName, string email, string password, string role)
+            public async Task SeedUser(string userName, string email, string password, string role, int deptId)
             {
                 // check if user doesn't exist
-                if ((userManager.FindByNameAsync(userName).Result) == null)
+                if ((_userManager.FindByNameAsync(userName).Result) == null)
                 {
                     // create desired user object
-                    ApplicationUser user = new ApplicationUser
+                    ApplicationUser user = new()
                     {
                         UserName = userName,
-                        Email = email
+                        Email = email,
+                        DepartmentId = deptId
                     };
 
                     // push desired user object to DB
-                    IdentityResult result = userManager.CreateAsync(user, password).Result;
+                    IdentityResult result = await _userManager.CreateAsync(user, password);
 
                     if (result.Succeeded)
                     {
-                        IdentityResult res = userManager.AddToRoleAsync(user, role).Result;
+                        _ = await _userManager.AddToRoleAsync(user, role);
                     }
                 }
             }
@@ -76,19 +77,24 @@ namespace WrldcHrIs.Application.Users.Commands.SeedUsers
             /**
              * This method seeds roles
              * **/
-            public void SeedUserRoles(RoleManager<IdentityRole> roleManager)
+            public async Task SeedUserRoles()
             {
-                SeedRole(roleManager, SecurityConstants.GuestRoleString);
-                SeedRole(roleManager, SecurityConstants.AdminRoleString);
+                foreach (string r in SecurityConstants.GetRoles())
+                {
+                    await SeedRole(r);
+                }
+                //await SeedRole(SecurityConstants.GuestRoleString);
+                //await SeedRole(SecurityConstants.AdminRoleString);
+                //await SeedRole(SecurityConstants.EmployeeRoleString);
             }
 
             /**
              * This method seeds a role
              * **/
-            public void SeedRole(RoleManager<IdentityRole> roleManager, string roleString)
+            public async Task SeedRole(string roleString)
             {
                 // check if role doesn't exist
-                if (!(roleManager.RoleExistsAsync(roleString).Result))
+                if (!(_roleManager.RoleExistsAsync(roleString).Result))
                 {
                     // create desired role object
                     IdentityRole role = new IdentityRole
@@ -96,7 +102,7 @@ namespace WrldcHrIs.Application.Users.Commands.SeedUsers
                         Name = roleString,
                     };
                     // push desired role object to DB
-                    IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                    _ = await _roleManager.CreateAsync(role);
                 }
             }
         }

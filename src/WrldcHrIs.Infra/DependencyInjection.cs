@@ -26,17 +26,19 @@ namespace WrldcHrIs.Infra
             if (environment.IsEnvironment("Testing"))
             {
                 // Add Persistence Infra
-                services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                     options.UseInMemoryDatabase(databaseName: "HrisDb"));
 
             }
             else
             {
                 // Add Persistence Infra
-                services.AddDbContext<IAppDbContext, AppDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                     options.UseNpgsql(
                         configuration.GetConnectionString("DefaultConnection")));
             }
+
+            services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
 
             // add identity framework on top of entity framework - https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-5.0#custom-user-data
             services

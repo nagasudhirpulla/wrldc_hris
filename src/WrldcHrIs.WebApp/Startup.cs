@@ -1,4 +1,4 @@
-using MeterDataDashboard.Infra.Identity;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WrldcHrIs.Application;
 using WrldcHrIs.Application.Common;
+using WrldcHrIs.Application.Departments.Commands.SeedDepartments;
+using WrldcHrIs.Application.Users.Commands.SeedUsers;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra;
 using WrldcHrIs.Infra.Identity;
@@ -35,12 +38,13 @@ namespace WrldcHrIs.WebApp
         {
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();
+            services.AddApplication();
             services.AddInfrastructure(Configuration, Environment);
             services.AddRazorPages().AddMvcOptions(o => o.Filters.Add(new AuthorizeFilter()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IdentityInit idInit)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMediator mediator)
         {
             if (env.IsDevelopment())
             {
@@ -61,19 +65,20 @@ namespace WrldcHrIs.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // seed Users and Roles
-            AppDbContextSeed identityInitializer = new AppDbContextSeed()
-            {
-                UserManager = userManager,
-                RoleManager = roleManager,
-                IdentityInit = idInit
-            };
-            identityInitializer.SeedIdentityData();
+            // seed Data
+            SeedData(mediator).Wait();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
+        }
+
+
+        public async Task SeedData(IMediator mediator)
+        {
+            _ = await mediator.Send(new SeedDepartmentsCommand());
+            _ = await mediator.Send(new SeedUsersCommand());
         }
     }
 }

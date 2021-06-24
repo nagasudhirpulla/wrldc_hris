@@ -11,6 +11,6 @@ namespace WrldcHrIs.Core.Entities
     public class Department: AuditableEntity
     {
         [Required]
-        public int Name { get; set; }
+        public string Name { get; set; }
     }
 }
