@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WrldcHrIs.Application.Common.Interfaces;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence;
 
@@ -12,9 +14,9 @@ namespace WrldcHrIs.WebApp.Pages.Departments
 {
     public class CreateModel : PageModel
     {
-        private readonly WrldcHrIs.Infra.Persistence.AppDbContext _context;
+        private readonly IAppDbContext _context;
 
-        public CreateModel(WrldcHrIs.Infra.Persistence.AppDbContext context)
+        public CreateModel(IAppDbContext context)
         {
             _context = context;
         }
@@ -35,7 +37,7 @@ namespace WrldcHrIs.WebApp.Pages.Departments
             }
 
             _context.Departments.Add(Department);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(new CancellationToken());
 
             return RedirectToPage("./Index");
         }

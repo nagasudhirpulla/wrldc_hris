@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using WrldcHrIs.Application.Common.Interfaces;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence;
 
@@ -12,9 +13,9 @@ namespace WrldcHrIs.WebApp.Pages.Departments
 {
     public class DetailsModel : PageModel
     {
-        private readonly WrldcHrIs.Infra.Persistence.AppDbContext _context;
+        private readonly IAppDbContext _context;
 
-        public DetailsModel(WrldcHrIs.Infra.Persistence.AppDbContext context)
+        public DetailsModel(IAppDbContext context)
         {
             _context = context;
         }
