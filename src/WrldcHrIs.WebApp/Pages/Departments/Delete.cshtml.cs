@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WrldcHrIs.Application.Common.Interfaces;
+using WrldcHrIs.Application.Users;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence;
 
