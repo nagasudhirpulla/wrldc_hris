@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WrldcHrIs.Application.Common.Interfaces;
+using WrldcHrIs.Application.Users;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence;
 
 namespace WrldcHrIs.WebApp.Pages.Departments
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class EditModel : PageModel
     {
         private readonly IAppDbContext _context;

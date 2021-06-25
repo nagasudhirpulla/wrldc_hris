@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WrldcHrIs.Application.Common.Interfaces;
+using WrldcHrIs.Application.Users;
 using WrldcHrIs.Core.Entities;
 using WrldcHrIs.Infra.Persistence;
 
 namespace WrldcHrIs.WebApp.Pages.Departments
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class CreateModel : PageModel
     {
         private readonly IAppDbContext _context;
