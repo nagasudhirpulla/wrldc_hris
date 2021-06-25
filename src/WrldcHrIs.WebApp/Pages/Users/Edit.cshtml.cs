@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,6 +20,7 @@ using WrldcHrIs.WebApp.Extensions;
 
 namespace WrldcHrIs.WebApp.Pages.Users
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class EditModel : PageModel
     {
         private readonly ILogger<EditModel> _logger;

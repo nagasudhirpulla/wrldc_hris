@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using WrldcHrIs.Application.Users;
 using WrldcHrIs.Application.Users.Commands.DeleteUser;
 using WrldcHrIs.Application.Users.Queries.GetAppUsers;
 using WrldcHrIs.Application.Users.Queries.GetUserById;
@@ -14,6 +16,7 @@ using WrldcHrIs.WebApp.Extensions;
 
 namespace WrldcHrIs.WebApp.Pages.Users
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class DeleteModel : PageModel
     {
         private readonly ILogger<DeleteModel> _logger;
