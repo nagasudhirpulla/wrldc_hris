@@ -15,6 +15,7 @@ namespace WrldcHrIs.Application.Common.Interfaces
     public interface IAppDbContext
     {
         DbSet<Department> Departments { get; set; }
+        DbSet<FoodItem> FoodItems { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

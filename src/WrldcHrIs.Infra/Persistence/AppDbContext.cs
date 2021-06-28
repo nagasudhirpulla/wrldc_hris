@@ -19,6 +19,7 @@ namespace WrldcHrIs.Infra.Persistence
     {
         private readonly ICurrentUserService _currentUserService;
         public DbSet<Department> Departments { get; set; }
+        public DbSet<FoodItem> FoodItems { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService)
             : base(options)
