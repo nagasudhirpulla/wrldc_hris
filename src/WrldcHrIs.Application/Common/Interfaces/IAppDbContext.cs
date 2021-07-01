@@ -16,6 +16,7 @@ namespace WrldcHrIs.Application.Common.Interfaces
     {
         DbSet<Department> Departments { get; set; }
         DbSet<FoodItem> FoodItems { get; set; }
+        DbSet<CanteenOrder> CanteenOrders { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
