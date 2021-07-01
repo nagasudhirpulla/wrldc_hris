@@ -1,0 +1,37 @@
+﻿@page
+@model WrldcHrIs.WebApp.Pages.CanteenOrders.CreateModel
+@{
+    ViewData["Title"] = "Create Canteen Order";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NewOrder.OrderDate"></label>
+                <input asp-for="NewOrder.OrderDate" class="form-control" type="date"/>
+                <span asp-validation-for="NewOrder.OrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Item</label>
+                <select asp-for="NewOrder.FoodItemName" class="form-control" asp-items="Model.FoodOpts"></select>
+                <span asp-validation-for="NewOrder.FoodItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewOrder.OrderQuantity"></label>
+                <input asp-for="NewOrder.OrderQuantity" class="form-control" />
+                <span asp-validation-for="NewOrder.OrderQuantity" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Create Order</button>
+        </form>
+        <a asp-page="/CanteenOrders/Index">Back to Today Orders</a>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

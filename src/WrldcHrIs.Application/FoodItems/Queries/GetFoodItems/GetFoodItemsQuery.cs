@@ -24,7 +24,7 @@ namespace WrldcHrIs.Application.FoodItems.Queries.GetFoodItems
 
             public async Task<List<FoodItem>> Handle(GetFoodItemsQuery request, CancellationToken cancellationToken)
             {
-                List<FoodItem> res = await _context.FoodItems.ToListAsync();
+                List<FoodItem> res = await _context.FoodItems.ToListAsync(cancellationToken: cancellationToken);
                 return res;
             }
         }

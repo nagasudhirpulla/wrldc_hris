@@ -21,8 +21,4 @@
     <ProjectReference Include="..\WrldcHrIs.Core\WrldcHrIs.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CanteenOrders\" />
-  </ItemGroup>
-
 </Project>
