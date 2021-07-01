@@ -65,14 +65,6 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
         {
             List<FoodItem> foodItems = await _mediator.Send(new GetFoodItemsQuery());
             foodItems.Insert(0, new FoodItem() { Name = null });
-            //List<SelectListItem> selItems = new()
-            //{
-            //    new SelectListItem() { Text = "--Select Item--", Value = null }
-            //};
-            //foreach (var item in foodItems)
-            //{
-            //    selItems.Add(new SelectListItem() { Text = item.Name, Value = item.Name });
-            //}
             FoodOpts = new SelectList(foodItems, "Name", "Name", null);
         }
 
