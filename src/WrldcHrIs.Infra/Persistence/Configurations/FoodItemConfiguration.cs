@@ -13,7 +13,13 @@ namespace WrldcHrIs.Infra.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(250);
 
-            // Name is unique
+            builder.Property(b => b.Description)
+                .HasMaxLength(500);
+
+            builder.Property(b => b.Price)
+                .IsRequired()
+                .HasDefaultValue(0);
+
             builder
             .HasIndex(b => b.Name)
             .IsUnique();
