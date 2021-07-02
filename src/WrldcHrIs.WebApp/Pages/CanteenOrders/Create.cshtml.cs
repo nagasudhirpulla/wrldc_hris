@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder;
 using WrldcHrIs.Application.Common;
 using WrldcHrIs.Application.FoodItems.Queries.GetFoodItems;
+using WrldcHrIs.Application.Users;
+using WrldcHrIs.Application.Users.Queries.GetAppUsers;
 using WrldcHrIs.Core.Entities;
 
 namespace WrldcHrIs.WebApp.Pages.CanteenOrders
@@ -30,6 +32,7 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
         public CreateOrderCommand NewOrder { get; set; }
 
         public SelectList FoodOpts { get; set; }
+        public SelectList UserOpts { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -51,6 +54,10 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
 
                 if (errors.Count == 0)
                 {
+                    if (IsUsrCanteenAdmin())
+                    {
+                        return RedirectToPage("./ViewOrders");
+                    }
                     return RedirectToPage("./Index");
                 }
 
@@ -70,6 +77,18 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
             List<FoodItem> foodItems = await _mediator.Send(new GetFoodItemsQuery());
             foodItems.Insert(0, new FoodItem() { Name = null });
             FoodOpts = new SelectList(foodItems, "Name", "Name", null);
+            UserOpts = new SelectList(new List<string>());
+            // check if user is in admin or canteen manager role
+            if (IsUsrCanteenAdmin())
+            {
+                UserListVM users = await _mediator.Send(new GetAppUsersQuery());
+                UserOpts = new SelectList(users.Users, "UserId", "Username");
+            }
+        }
+
+        public bool IsUsrCanteenAdmin()
+        {
+            return User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.CanteenMgrRoleString);
         }
 
     }

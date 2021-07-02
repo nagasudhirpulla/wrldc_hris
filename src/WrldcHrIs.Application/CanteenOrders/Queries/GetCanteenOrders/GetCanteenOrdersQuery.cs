@@ -30,6 +30,7 @@ namespace WrldcHrIs.Application.CanteenOrders.Queries.GetCanteenOrders
             {
                 List<CanteenOrder> res = await _context.CanteenOrders
                                                 .Where(co => co.OrderDate >= request.StartDate && co.OrderDate <= request.EndDate)
+                                                .Include(co => co.Customer)
                                                 .ToListAsync(cancellationToken: cancellationToken);
                 return res;
             }

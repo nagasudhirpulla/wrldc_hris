@@ -1,5 +1,10 @@
 ﻿@page
 @model WrldcHrIs.WebApp.Pages.CanteenOrders.CreateModel
+@using Microsoft.AspNetCore.Identity;
+@using WrldcHrIs.Core.Entities;
+@using WrldcHrIs.Application.Users;
+
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Create Canteen Order";
 }
@@ -12,9 +17,17 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="NewOrder.OrderDate"></label>
-                <input asp-for="NewOrder.OrderDate" class="form-control" type="date"/>
+                <input asp-for="NewOrder.OrderDate" class="form-control" type="date" />
                 <span asp-validation-for="NewOrder.OrderDate" class="text-danger"></span>
             </div>
+            @if (User.IsInRole(SecurityConstants.CanteenMgrRoleString) || User.IsInRole(SecurityConstants.AdminRoleString))
+            {
+                <div class="form-group">
+                    <label>Customer</label>
+                    <select asp-for="NewOrder.CustomerId" class="form-control" asp-items="Model.UserOpts"></select>
+                    <span asp-validation-for="NewOrder.CustomerId" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <label>Item</label>
                 <select asp-for="NewOrder.FoodItemName" class="form-control" asp-items="Model.FoodOpts"></select>
