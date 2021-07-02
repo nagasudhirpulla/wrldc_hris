@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WrldcHrIs.Application.Common;
 using WrldcHrIs.Application.Common.Interfaces;
+using WrldcHrIs.Application.Users;
 using WrldcHrIs.Core.Entities;
 
 namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
@@ -28,19 +29,28 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
 
         public async Task<List<string>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            string userId = _currentUserService.UserId;
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            string curUsrId = _currentUserService.UserId;
+            ApplicationUser curUsr = await _userManager.FindByIdAsync(curUsrId);
+            if (curUsr == null)
             {
                 var errorMsg = "Logged User not found for order creation";
                 _logger.LogError(errorMsg);
                 return new List<string>() { errorMsg };
             }
 
+            // check if user is authorized for adding order
+            IList<string> usrRoles = await _userManager.GetRolesAsync(curUsr);
+            if (curUsrId != request.CustomerId
+                && !usrRoles.Contains(SecurityConstants.AdminRoleString)
+                && !usrRoles.Contains(SecurityConstants.CanteenMgrRoleString))
+            {
+                return new List<string>() { "This user is not authorized for creating this order since this is not his order and he is not canteen manager or admin" };
+            }
+
             // check if order already created
             var isOrderAlreadyPresent = await _context.CanteenOrders.AnyAsync(co => co.FoodItemName == request.FoodItemName
-                                                                            && co.CustomerId == userId
-                                                                            && co.OrderDate == request.OrderDate);
+                                                                            && co.CustomerId == curUsrId
+                                                                            && co.OrderDate == request.OrderDate, cancellationToken: cancellationToken);
 
             if (isOrderAlreadyPresent)
             {
@@ -53,7 +63,7 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
             {
                 OrderDate = request.OrderDate,
                 FoodItemName = request.FoodItemName,
-                CustomerId = userId,
+                CustomerId = curUsrId,
                 OrderQuantity = request.OrderQuantity
             };
 
