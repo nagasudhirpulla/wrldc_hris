@@ -26,6 +26,8 @@
                         <th>Date</th>
                         <th>Item</th>
                         <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Item Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,6 +38,8 @@
                             <td><span class="d-none">@(ordr.OrderDate.ToString("yyyy-MM-dd"))</span><span>@(ordr.OrderDate.ToString("dd-MMM-yyyy"))</span></td>
                             <td>@ordr.FoodItemName</td>
                             <td>@ordr.OrderQuantity</td>
+                            <td>@(ordr.FoodItemUnitPrice*ordr.OrderQuantity)</td>
+                            <td>@ordr.FoodItemDescription</td>
                             <td>
                                 <a asp-page="./EditOrder" asp-route-id="@ordr.Id">Edit</a> |
                                 <a asp-page="./Delete" asp-route-id="@ordr.Id">Delete</a>
@@ -48,6 +52,8 @@
                         <th>Date</th>
                         <th>Item</th>
                         <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Item Description</th>
                         <th>Actions</th>
                     </tr>
                 </tfoot>

@@ -31,6 +31,7 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
         [BindProperty]
         public CreateOrderCommand NewOrder { get; set; }
 
+        public List<FoodItem> FoodItems { get; set; }
         public SelectList FoodOpts { get; set; }
         public SelectList UserOpts { get; set; }
 
@@ -43,6 +44,15 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await InitSelectListItems();
+            // attach food item info to command
+            FoodItem selFoodItem = FoodItems.FirstOrDefault(fi => fi.Name == NewOrder.FoodItemName);
+            if (selFoodItem != null)
+            {
+                NewOrder.FoodItemUnitPrice = selFoodItem.Price;
+                NewOrder.FoodItemDescription = selFoodItem.Description;
+            }
+
             // validate command
             ValidationResult validationCheck = new CreateOrderCommandValidator().Validate(NewOrder);
             validationCheck.AddToModelState(ModelState, nameof(NewOrder));
@@ -67,7 +77,6 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
                 }
             }
 
-            await InitSelectListItems();
             return Page();
         }
 
@@ -75,6 +84,7 @@ namespace WrldcHrIs.WebApp.Pages.CanteenOrders
         public async Task InitSelectListItems()
         {
             List<FoodItem> foodItems = await _mediator.Send(new GetFoodItemsQuery());
+            FoodItems = new List<FoodItem>(foodItems);
             foodItems.Insert(0, new FoodItem() { Name = null });
             FoodOpts = new SelectList(foodItems, "Name", "Name", null);
             UserOpts = new SelectList(new List<string>());

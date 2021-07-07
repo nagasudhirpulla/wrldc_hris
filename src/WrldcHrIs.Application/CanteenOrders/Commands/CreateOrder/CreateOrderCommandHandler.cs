@@ -62,9 +62,11 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
             CanteenOrder order = new()
             {
                 OrderDate = request.OrderDate,
+                OrderQuantity = request.OrderQuantity,
                 FoodItemName = request.FoodItemName,
-                CustomerId = curUsrId,
-                OrderQuantity = request.OrderQuantity
+                FoodItemDescription = request.FoodItemDescription,
+                FoodItemUnitPrice = request.FoodItemUnitPrice,
+                CustomerId = curUsrId
             };
 
             _context.CanteenOrders.Add(order);

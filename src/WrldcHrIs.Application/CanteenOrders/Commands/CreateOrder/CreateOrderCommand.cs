@@ -15,5 +15,8 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
 
         public string FoodItemName { get; set; }
 
+        public string FoodItemDescription { get; set; }
+
+        public float FoodItemUnitPrice { get; set; }
     }
 }

@@ -20,7 +20,13 @@ namespace WrldcHrIs.Infra.Persistence.Configurations
 
             builder.Property(b => b.FoodItemName)
                 .IsRequired()
+                .HasMaxLength(250);
+
+            builder.Property(b => b.FoodItemDescription)
                 .HasMaxLength(500);
+
+            builder.Property(b => b.FoodItemUnitPrice)
+                .IsRequired();
 
             builder
                 .HasIndex(b => new { b.OrderDate, b.CustomerId, b.FoodItemName })
