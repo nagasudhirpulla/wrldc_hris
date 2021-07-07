@@ -49,7 +49,7 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
 
             // check if order already created
             var isOrderAlreadyPresent = await _context.CanteenOrders.AnyAsync(co => co.FoodItemName == request.FoodItemName
-                                                                            && co.CustomerId == curUsrId
+                                                                            && co.CustomerId == request.CustomerId
                                                                             && co.OrderDate == request.OrderDate, cancellationToken: cancellationToken);
 
             if (isOrderAlreadyPresent)
