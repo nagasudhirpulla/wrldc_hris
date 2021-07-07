@@ -66,7 +66,7 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
                 FoodItemName = request.FoodItemName,
                 FoodItemDescription = request.FoodItemDescription,
                 FoodItemUnitPrice = request.FoodItemUnitPrice,
-                CustomerId = curUsrId
+                CustomerId = request.CustomerId
             };
 
             _context.CanteenOrders.Add(order);
