@@ -39,6 +39,7 @@
                             <td>@user.Department</td>
                             <td>@Html.DisplayFor(modelItem => user.IsActive)</td>
                             <td>
+                                <a asp-page="./Details" asp-route-id="@user.UserId">Details</a> |
                                 <a asp-page="./Edit" asp-route-id="@user.UserId">Edit</a> |
                                 <a asp-page="./Delete" asp-route-id="@user.UserId">Delete</a>
                             </td>
