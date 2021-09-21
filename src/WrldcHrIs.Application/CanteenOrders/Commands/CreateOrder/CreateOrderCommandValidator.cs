@@ -10,8 +10,8 @@ namespace WrldcHrIs.Application.CanteenOrders.Commands.CreateOrder
             RuleFor(x => x.OrderDate).NotEmpty().GreaterThanOrEqualTo(DateTime.Today);
             RuleFor(x => x.OrderQuantity).NotEmpty().GreaterThan(0);
             RuleFor(x => x.FoodItemName).NotEmpty();
-            RuleFor(x => x.FoodItemUnitPrice).NotEmpty().GreaterThanOrEqualTo(0);
             RuleFor(x => x.CustomerId).NotEmpty();
+            RuleFor(x => x.FoodItemUnitPrice).NotEmpty().GreaterThanOrEqualTo(0);
         }
     }
 }

@@ -28,6 +28,10 @@
                     <span asp-validation-for="NewOrder.CustomerId" class="text-danger"></span>
                 </div>
             }
+            else
+            {
+                <input type="hidden" asp-for="NewOrder.CustomerId" />
+            }
             <div class="form-group">
                 <label>Item</label>
                 <select asp-for="NewOrder.FoodItemName" class="form-control" asp-items="Model.FoodOpts"></select>
